@@ -1,0 +1,58 @@
+# =========================
+# Go Standard
+# =========================
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+go.work.sum
+vendor/
+
+# =========================
+# RiskRancher Compiled Binaries
+# =========================
+# Ignore the local builds so you don't accidentally push a 20MB executable
+rr.exe
+
+# =========================
+# Runtime Data & Uploads (CRITICAL)
+# =========================
+# Ignore all runtime databases and uploaded pentest reports/images
+/data/*
+!/data/.keep
+/backups/*
+!/backups/.keep
+
+# SQLite temporary and journal files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# =========================
+# Environment & Secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# IDEs & OS Files
+# =========================
+# GoLand / IntelliJ
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db

@@ -1,14 +1,29 @@
 # RiskRancher Core
 
-**DefectDojo without the Docker tax.** Air-gapped vulnerability management in a single Go binary — with a no-code Adapter Builder that maps any scanner export into tickets.
+Open-source **vulnerability management** in a single Go binary.
+
+Ingest findings from any scanner (Qualys, Nessus, Trivy, Dependabot, or custom JSON/CSV), map fields in a no-code Adapter Builder, and track remediation in one air-gapped ticket dashboard — no Postgres, Redis, Docker Compose, or Kubernetes required.
+
+**DefectDojo without the Docker tax.**
 
 Apache License 2.0 · [Releases](https://github.com/Kuebiko-LLC/risk-rancher-core/releases) · [Website](https://www.riskrancher.com) · [Pricing](https://www.riskrancher.com/pricing)
 
-## Why Core
+## What it is
 
-- **Single binary + SQLite** — no Postgres, Redis, Celery, or Kubernetes. Download, run, open `http://localhost:8080`.
-- **No-code scanner connectors** — upload Qualys, Nessus, Trivy, Dependabot, or any JSON/CSV export; map fields in the UI; ingest. No custom parsers.
-- **100% air-gapped** — zero telemetry, zero outbound API calls. Your findings stay on your machine.
+RiskRancher Core is a self-hosted vulnerability management platform for security engineers and pentesters who are tired of:
+
+- Standing up heavy stacks just to store scanner output
+- Writing one-off scripts to normalize every new tool’s JSON
+- Spreadsheets as the “system of record” for findings
+
+Drop one binary on a laptop or air-gapped server, open the UI, build a connector, and start triaging.
+
+## Why teams use it
+
+- **Single binary + SQLite** — download, run, open `http://localhost:8080`. No microservices.
+- **No-code scanner connectors** — upload any export, map title / asset / severity in the UI, ingest. No custom parsers.
+- **100% air-gapped** — zero telemetry, zero outbound API calls. Findings stay on your machine.
+- **Ticket workflow built in** — asset grouping, severities, SLAs, and a practitioner dashboard so work actually gets done.
 
 ## Quick start
 
@@ -32,7 +47,7 @@ chmod +x rr-linux-amd64   # or rr-darwin-arm64
 
 **Option A — sample Trivy file**
 
-1. Register the first user (Sheriff / admin).
+1. Register the first user (admin).
 2. Go to **Ingest** → select the built-in **Trivy Container Scan** adapter (or create one).
 3. Upload [`examples/trivy-sample.json`](examples/trivy-sample.json).
 4. Open the ticket dashboard — findings are grouped by asset.
@@ -55,9 +70,15 @@ go build -o rr ./cmd/rr/main.go
 ./rr
 ```
 
+## Who it’s for
+
+- Security engineers drowning in scanner noise
+- Pentesters who need findings in a real tracker (not only a Word report)
+- Teams that need on-prem / air-gapped vulnerability management without a DevOps project
+
 ## Upgrade path
 
-Core is free forever. When you need engagement reports (Auditor) or team automation (Pro), drop in the commercial binary — same SQLite database, zero ETL.
+Core is free forever (Apache 2.0). When you need engagement reports or team automation, drop in the commercial binary — same SQLite database, zero ETL.
 
 - [Auditor — $1,999/yr](https://www.riskrancher.com/auditor) — findings ↔ branded reports for pentesters
 - [Pro — $4,999/yr](https://www.riskrancher.com/pro) — auto-assign, exceptions, suppressions, flat fee unlimited assets

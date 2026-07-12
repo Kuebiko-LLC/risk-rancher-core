@@ -5,6 +5,7 @@ import (
 	"encoding/csv"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -75,17 +76,29 @@ func (h *Handler) HandleCSVIngest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 1. Grab the adapter_name sent by the frontend JS
-	adapterName := r.FormValue("adapter_name")
-	if adapterName == "" {
-		http.Error(w, "Missing adapter_name", http.StatusBadRequest)
-		return
-	}
+	var adapter domain.Adapter
+	var err error
 
-	// 2. Look up the adapter by Name instead of ID
-	adapter, err := h.Store.GetAdapterByName(r.Context(), adapterName)
-	if err != nil {
-		http.Error(w, "Adapter mapping not found", http.StatusNotFound)
+	// Prefer adapter_name (UI); fall back to adapter_id for tests/API clients
+	if adapterName := r.FormValue("adapter_name"); adapterName != "" {
+		adapter, err = h.Store.GetAdapterByName(r.Context(), adapterName)
+		if err != nil {
+			http.Error(w, "Adapter mapping not found", http.StatusNotFound)
+			return
+		}
+	} else if idStr := r.FormValue("adapter_id"); idStr != "" {
+		var id int
+		if _, scanErr := fmt.Sscanf(idStr, "%d", &id); scanErr != nil || id < 1 {
+			http.Error(w, "Invalid adapter_id", http.StatusBadRequest)
+			return
+		}
+		adapter, err = h.Store.GetAdapterByID(r.Context(), id)
+		if err != nil {
+			http.Error(w, "Adapter mapping not found", http.StatusNotFound)
+			return
+		}
+	} else {
+		http.Error(w, "Missing adapter_name or adapter_id", http.StatusBadRequest)
 		return
 	}
 

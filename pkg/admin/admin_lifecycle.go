@@ -16,7 +16,7 @@ type UpdateCheckResponse struct {
 	Message         string `json:"message"`
 }
 
-// HandleCheckUpdates pings gitea. If air-gapped, it returns manual instructions.
+// HandleCheckUpdates pings GitHub. If air-gapped, it returns manual instructions.
 func (h *Handler) HandleCheckUpdates(w http.ResponseWriter, r *http.Request) {
 	respPayload := UpdateCheckResponse{
 		CurrentVersion: CurrentAppVersion,
@@ -24,8 +24,8 @@ func (h *Handler) HandleCheckUpdates(w http.ResponseWriter, r *http.Request) {
 
 	client := http.Client{Timeout: 3 * time.Second}
 
-	giteaURL := "https://epigas.gitea.cloud/api/v1/repos/RiskRancher/core/releases/latest"
-	resp, err := client.Get(giteaURL)
+	githubURL := "https://api.github.com/repos/Kuebiko-LLC/risk-rancher-core/releases/latest"
+	resp, err := client.Get(githubURL)
 
 	if err != nil || resp.StatusCode != http.StatusOK {
 		respPayload.Status = "offline"

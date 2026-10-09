@@ -1,8 +1,8 @@
 package auth
 
 import (
+	"crypto/rand"
 	"encoding/base64"
-	"math/rand"
 
 	"code.riskrancher.com/RiskRancher/core/pkg/domain"
 	"golang.org/x/crypto/bcrypt"

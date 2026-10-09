@@ -1,11 +1,11 @@
 package report
 
 import (
+	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
-	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -109,7 +109,10 @@ func (h *Handler) HandleImageUpload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	randBytes := make([]byte, 8)
-	rand.Read(randBytes)
+	if _, err := rand.Read(randBytes); err != nil {
+		http.Error(w, "Failed to generate filename", http.StatusInternalServerError)
+		return
+	}
 	fileName := fmt.Sprintf("img_%x%s", randBytes, ext)
 
 	uploadDir := filepath.Join("data", "testdata", "images")

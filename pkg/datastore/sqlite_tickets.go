@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
 	"time"
 
 	"code.riskrancher.com/RiskRancher/core/pkg/domain"
@@ -40,7 +39,7 @@ func (s *SQLiteStore) CreateTicket(ctx context.Context, t *domain.Ticket) error 
 		t.AssetIdentifier = "Default"
 	}
 
-	rawHash := fmt.Sprintf("%s-%s-%s-%s", t.Source, t.AssetIdentifier, t.Title, t.Severity)
+	rawHash := t.Source + "|" + t.AssetIdentifier + "|" + t.Title
 	hashBytes := sha256.Sum256([]byte(rawHash))
 	t.DedupeHash = hex.EncodeToString(hashBytes[:])
 
